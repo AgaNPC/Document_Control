@@ -3,55 +3,67 @@
 @section('content')
 <div x-data="repositoryView()" class="space-y-6">
 
-    <!-- Header Description Banner -->
-    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 bg-white p-5 rounded-2xl shadow-sm border border-slate-200">
+    <!-- Description & Count Banner -->
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 bg-paper p-6 rounded-card border border-[#d4e0ed] shadow-card-sm">
         <div>
-            <h3 class="text-base font-bold text-slate-900 flex items-center gap-2">
-                <span>📁</span> Perpustakaan Dokumen Terdokumentasi
+            <h3 class="text-base font-bold text-[#0b3558] flex items-center gap-2">
+                <svg class="w-5 h-5 text-[#006bff]" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12.75V12A2.25 2.25 0 014.5 9.75h15A2.25 2.25 0 0121.75 12v.75m-8.69-6.44l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z" />
+                </svg>
+                <span>Perpustakaan Dokumen Terdokumentasi</span>
             </h3>
-            <p class="text-xs text-slate-500 mt-0.5">Seluruh SOP & regulasi berstatus ACTIVE terproteksi In-App PDF Viewer dan dynamic watermark terproteksi ISO 14001, 45001, 27001.</p>
+            <p class="text-xs text-[#476788] mt-1 font-normal">Repositori terpusat untuk seluruh SOP dan regulasi berstatus ACTIVE dengan fitur in-app viewer dan dynamic watermark terproteksi.</p>
         </div>
-        <div class="text-xs bg-slate-100 text-slate-700 px-3.5 py-2 rounded-xl font-bold border border-slate-200 shrink-0">
-            Dokumen Aktif: <span class="text-blue-600 font-extrabold text-sm">{{ $documents->total() }}</span>
+        <div class="text-xs bg-[#f0f3f8] text-[#004eba] px-4 py-2.5 rounded-full font-bold border border-[#d4e0ed] shrink-0">
+            Total Dokumen Active: <span class="text-[#006bff] font-extrabold">{{ $documents->total() }}</span>
         </div>
     </div>
 
-    <!-- Tree Explorer & Main Content Grid -->
+    <!-- Main Layout: Folder Explorer + Document Table -->
     <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
 
-        <!-- Folder Explorer Tree -->
-        <div class="lg:col-span-1 bg-white p-4 rounded-2xl shadow-sm border border-slate-200 space-y-4">
-            <h4 class="text-xs font-bold text-slate-500 uppercase tracking-wider border-b pb-2">
+        <!-- Folder Explorer Sidebar -->
+        <div class="lg:col-span-1 bg-paper p-5 rounded-card border border-[#d4e0ed] shadow-card-sm space-y-4">
+            <h4 class="text-xs font-bold text-[#476788] uppercase tracking-wider border-b border-[#d4e0ed] pb-3">
                 Struktur Hirarki Folder
             </h4>
             
             <div class="text-xs space-y-2">
                 <!-- Company Root -->
-                <div class="font-bold text-slate-900 flex items-center gap-1.5 p-1 bg-slate-50 rounded-lg">
-                    <span>🏢</span> PT Enterprise Corp
+                <div class="font-bold text-[#0b3558] flex items-center gap-2 p-2 bg-[#f0f3f8] rounded-btn border border-[#d4e0ed]">
+                    <svg class="w-4 h-4 text-[#006bff]" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 21h16.5M4.5 3h15M5.25 3v18m13.5-18v18M9 6.75h1.5s0 0 0 0m0 3h-1.5s0 0 0 0m0 3h1.5s0 0 0 0m0 3h-1.5s0 0 0 0m6-9h1.5s0 0 0 0m0 3h-1.5s0 0 0 0m0 3h1.5s0 0 0 0m0 3h-1.5s0 0 0 0" />
+                    </svg>
+                    <span>PT Enterprise Corp</span>
                 </div>
 
-                <!-- Departments Tree -->
-                <div class="pl-3 space-y-1 border-l-2 border-slate-200">
+                <!-- Department Nodes -->
+                <div class="pl-3 space-y-1 border-l border-[#d4e0ed]">
                     <a href="{{ route('repository.index') }}" 
-                       class="block text-xs text-slate-700 hover:text-blue-600 font-semibold py-1 px-2 rounded-lg hover:bg-slate-100 transition {{ !request('department') ? 'bg-blue-50 text-blue-700 font-bold' : '' }}">
-                        📂 Semua Departemen
+                       class="block text-xs text-[#0b3558] hover:text-[#006bff] font-semibold py-1.5 px-3 rounded-btn hover:bg-[#f0f3f8] transition {{ !request('department') ? 'bg-[#e6f0ff] text-[#006bff] font-bold' : '' }}">
+                        Semua Departemen
                     </a>
                     @foreach($departments as $dept)
                         <div x-data="{ openDept: {{ request('department') == $dept ? 'true' : 'false' }} }">
                             <div @click="openDept = !openDept" 
-                                 class="flex items-center justify-between py-1.5 px-2 rounded-lg hover:bg-slate-100 cursor-pointer font-bold text-slate-700 transition">
-                                <span class="flex items-center gap-1.5 truncate">
-                                    <span>📁</span> {{ $dept }}
+                                 class="flex items-center justify-between py-1.5 px-3 rounded-btn hover:bg-[#f0f3f8] cursor-pointer font-semibold text-[#0b3558] transition">
+                                <span class="flex items-center gap-2 truncate">
+                                    <svg class="w-3.5 h-3.5 text-[#476788]" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12.75V12A2.25 2.25 0 014.5 9.75h15A2.25 2.25 0 0121.75 12v.75m-8.69-6.44l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z" />
+                                    </svg>
+                                    <span class="truncate">{{ $dept }}</span>
                                 </span>
-                                <span class="text-[10px] text-slate-400" x-text="openDept ? '▲' : '▼'"></span>
+                                <svg class="w-3 h-3 text-[#476788] transition-transform" :class="openDept ? 'rotate-180' : ''" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                                </svg>
                             </div>
-                            <!-- Category Sub-tree -->
+
+                            <!-- Categories -->
                             <div x-show="openDept" x-cloak class="pl-4 py-1 space-y-1">
                                 @foreach($categories as $cat)
                                     <a href="{{ route('repository.index', ['department' => $dept, 'category' => $cat]) }}" 
-                                       class="block text-[11px] py-1 px-2 rounded hover:bg-blue-50 text-slate-600 hover:text-blue-700 font-medium transition {{ (request('department') == $dept && request('category') == $cat) ? 'bg-blue-100 text-blue-800 font-bold' : '' }}">
-                                        📄 {{ $cat }}
+                                       class="block text-[11px] py-1 px-2.5 rounded-btn text-[#476788] hover:text-[#006bff] hover:bg-[#f0f3f8] font-medium transition {{ (request('department') == $dept && request('category') == $cat) ? 'bg-[#e6f0ff] text-[#006bff] font-bold' : '' }}">
+                                        Kategori: {{ $cat }}
                                     </a>
                                 @endforeach
                             </div>
@@ -61,21 +73,21 @@
             </div>
         </div>
 
-        <!-- Filter & Search Table Section -->
-        <div class="lg:col-span-3 space-y-4">
+        <!-- Filter & Table Section -->
+        <div class="lg:col-span-3 space-y-6">
 
-            <!-- Search & Multi-criteria Filter Bar -->
-            <form method="GET" action="{{ route('repository.index') }}" class="bg-white p-4 rounded-2xl shadow-sm border border-slate-200 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
+            <!-- Search & Filter Form -->
+            <form method="GET" action="{{ route('repository.index') }}" class="bg-paper p-5 rounded-card border border-[#d4e0ed] shadow-card-sm grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-xs">
                 <div class="sm:col-span-2 lg:col-span-4">
-                    <label class="block font-bold text-slate-600 mb-1">Cari Kata Kunci (Nomor / Judul / Kategori):</label>
+                    <label class="block font-bold text-[#0b3558] mb-1.5">Kata Kunci (Nomor / Judul / Kategori):</label>
                     <input type="text" name="search" value="{{ request('search') }}"
-                           placeholder="Ketik untuk mencari dokumen..."
-                           class="w-full p-2.5 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none text-xs">
+                           placeholder="Ketik untuk mencari dari seluruh dokumen active..."
+                           class="w-full p-3 border border-[#d4e0ed] rounded-input bg-[#f8f9fb] focus:bg-paper focus:ring-2 focus:ring-[#006bff] focus:outline-none text-xs text-[#0b3558]">
                 </div>
 
                 <div>
-                    <label class="block font-bold text-slate-600 mb-1">Departemen:</label>
-                    <select name="department" class="w-full p-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                    <label class="block font-bold text-[#0b3558] mb-1.5">Departemen:</label>
+                    <select name="department" class="w-full p-2.5 border border-[#d4e0ed] rounded-input bg-[#f8f9fb] focus:bg-paper focus:outline-none text-[#0b3558]">
                         <option value="">-- Semua Departemen --</option>
                         @foreach($departments as $dept)
                             <option value="{{ $dept }}" {{ request('department') == $dept ? 'selected' : '' }}>{{ $dept }}</option>
@@ -84,8 +96,8 @@
                 </div>
 
                 <div>
-                    <label class="block font-bold text-slate-600 mb-1">Kategori Standard:</label>
-                    <select name="category" class="w-full p-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                    <label class="block font-bold text-[#0b3558] mb-1.5">Kategori Standard:</label>
+                    <select name="category" class="w-full p-2.5 border border-[#d4e0ed] rounded-input bg-[#f8f9fb] focus:bg-paper focus:outline-none text-[#0b3558]">
                         <option value="">-- Semua Kategori --</option>
                         @foreach($categories as $cat)
                             <option value="{{ $cat }}" {{ request('category') == $cat ? 'selected' : '' }}>{{ $cat }}</option>
@@ -94,69 +106,69 @@
                 </div>
 
                 <div>
-                    <label class="block font-bold text-slate-600 mb-1">Nomor Dokumen:</label>
-                    <input type="text" name="doc_number" value="{{ request('doc_number') }}" placeholder="SOP-IT-001..." class="w-full p-2 border border-slate-300 rounded-xl">
+                    <label class="block font-bold text-[#0b3558] mb-1.5">Nomor Dokumen:</label>
+                    <input type="text" name="doc_number" value="{{ request('doc_number') }}" placeholder="SOP-K3-001..." class="w-full p-2.5 border border-[#d4e0ed] rounded-input bg-[#f8f9fb] text-[#0b3558]">
                 </div>
 
                 <div class="flex items-end space-x-2">
-                    <button type="submit" class="w-full py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition shadow">Filter</button>
-                    <a href="{{ route('repository.index') }}" class="py-2 px-3 bg-slate-200 text-slate-700 font-bold rounded-xl text-center">Reset</a>
+                    <button type="submit" class="w-full py-2.5 bg-[#006bff] hover:bg-[#0058d4] text-white font-bold rounded-btn transition shadow-sm">Filter</button>
+                    <a href="{{ route('repository.index') }}" class="py-2.5 px-4 bg-[#f0f3f8] text-[#476788] hover:text-[#0b3558] font-semibold rounded-btn text-center border border-[#d4e0ed]">Reset</a>
                 </div>
             </form>
 
             <!-- Document List Table -->
-            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+            <div class="bg-paper rounded-card border border-[#d4e0ed] shadow-card-sm overflow-hidden">
                 <div class="overflow-x-auto">
                     <table class="w-full text-left text-xs">
-                        <thead class="bg-slate-900 text-white uppercase text-[11px] font-bold">
+                        <thead class="bg-[#0b3558] text-white uppercase text-[11px] font-bold">
                             <tr>
-                                <th class="p-3.5">No. Dokumen</th>
-                                <th class="p-3.5">Judul Dokumen</th>
-                                <th class="p-3.5">Departemen</th>
-                                <th class="p-3.5">Kategori</th>
-                                <th class="p-3.5">Revisi</th>
-                                <th class="p-3.5">Status</th>
-                                <th class="p-3.5 text-center">Pratinjau / Stream</th>
+                                <th class="p-4">No. Dokumen</th>
+                                <th class="p-4">Judul Dokumen</th>
+                                <th class="p-4">Departemen</th>
+                                <th class="p-4">Kategori</th>
+                                <th class="p-4">Revisi</th>
+                                <th class="p-4">Status</th>
+                                <th class="p-4 text-center">In-App Stream</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-slate-200">
+                        <tbody class="divide-y divide-[#f0f3f8]">
                             @forelse($documents as $doc)
-                                <tr class="hover:bg-slate-50 transition">
-                                    <td class="p-3.5 font-mono font-bold text-blue-700">{{ $doc->DocNumber }}</td>
-                                    <td class="p-3.5 font-semibold text-slate-800">{{ $doc->Title }}</td>
-                                    <td class="p-3.5 text-slate-600">{{ $doc->Department }}</td>
-                                    <td class="p-3.5">
-                                        <span class="px-2.5 py-0.5 rounded font-bold text-[10px] 
-                                            {{ $doc->Category == 'K3' ? 'bg-amber-100 text-amber-800 border border-amber-300' : '' }}
-                                            {{ $doc->Category == 'Lingkungan' ? 'bg-emerald-100 text-emerald-800 border border-emerald-300' : '' }}
-                                            {{ $doc->Category == 'IT/Keamanan' ? 'bg-indigo-100 text-indigo-800 border border-indigo-300' : '' }}
-                                            {{ $doc->Category == 'Mutu' ? 'bg-blue-100 text-blue-800 border border-blue-300' : '' }}">
+                                <tr class="hover:bg-[#f8f9fb] transition">
+                                    <td class="p-4 font-mono font-bold text-[#006bff]">{{ $doc->DocNumber }}</td>
+                                    <td class="p-4 font-bold text-[#0b3558]">{{ $doc->Title }}</td>
+                                    <td class="p-4 text-[#476788] font-medium">{{ $doc->Department }}</td>
+                                    <td class="p-4">
+                                        <span class="px-3 py-1 rounded-full font-semibold text-[11px] bg-[#e6f0ff] text-[#004eba] border border-[#d4e0ed]">
                                             {{ $doc->Category }}
                                         </span>
                                     </td>
-                                    <td class="p-3.5 font-mono text-slate-700 font-bold">{{ $doc->CurrentRevision }}</td>
-                                    <td class="p-3.5">
-                                        <span class="px-2.5 py-0.5 rounded-full font-bold text-[10px] bg-emerald-600 text-white shadow-sm">
+                                    <td class="p-4 font-mono text-[#0b3558] font-bold">{{ $doc->CurrentRevision }}</td>
+                                    <td class="p-4">
+                                        <span class="px-3 py-1 rounded-full font-bold text-[10px] bg-[#006bff] text-white">
                                             ACTIVE
                                         </span>
                                     </td>
-                                    <td class="p-3.5 text-center">
+                                    <td class="p-4 text-center">
                                         <button @click="openPdfViewer('{{ route('documents.stream', $doc->DocumentID) }}', '{{ $doc->DocNumber }} - {{ $doc->Title }}')"
-                                                class="bg-slate-900 hover:bg-blue-600 text-white px-3 py-1.5 rounded-xl text-xs font-bold transition shadow inline-flex items-center justify-center gap-1.5">
-                                            <span>👁️</span> Pratinjau PDF
+                                                class="bg-[#0b3558] hover:bg-[#082843] text-white px-4 py-2 rounded-btn text-xs font-semibold transition shadow-sm inline-flex items-center justify-center gap-2">
+                                            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                            </svg>
+                                            <span>Pratinjau PDF</span>
                                         </button>
                                     </td>
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="7" class="p-8 text-center text-slate-500 font-medium">Tidak ada dokumen yang ditemukan.</td>
+                                    <td colspan="7" class="p-8 text-center text-[#476788] font-medium">Dokumen tidak ditemukan.</td>
                                 </tr>
                             @endforelse
                         </tbody>
                     </table>
                 </div>
 
-                <div class="p-3 border-t bg-slate-50">
+                <div class="p-4 border-t border-[#d4e0ed] bg-[#f8f9fb]">
                     {{ $documents->links() }}
                 </div>
             </div>
@@ -165,28 +177,26 @@
     </div>
 
     <!-- PDF.js In-App Secure Viewer Modal -->
-    <div x-show="pdfViewerModal" x-cloak class="fixed inset-0 bg-slate-900/80 backdrop-blur-md z-50 flex items-center justify-center p-4">
-        <div class="bg-slate-900 rounded-2xl shadow-2xl max-w-5xl w-full h-[88vh] flex flex-col overflow-hidden border border-slate-700">
-            <!-- Viewer Header -->
-            <div class="bg-slate-950 px-5 py-3.5 border-b border-slate-800 flex items-center justify-between text-white">
-                <div class="flex items-center space-x-2 truncate">
-                    <span class="bg-blue-600 text-[10px] font-bold px-2 py-0.5 rounded uppercase shrink-0">Secure Viewer</span>
+    <div x-show="pdfViewerModal" x-cloak class="fixed inset-0 bg-[#0b3558]/50 backdrop-blur-sm z-50 flex items-center justify-center p-6">
+        <div class="bg-[#0b3558] rounded-card shadow-calendly max-w-5xl w-full h-[88vh] flex flex-col overflow-hidden border border-[#d4e0ed]">
+            <div class="bg-[#082843] px-6 py-4 border-b border-[#476788]/30 flex items-center justify-between text-white">
+                <div class="flex items-center space-x-3 truncate">
+                    <span class="bg-[#006bff] text-[10px] font-bold px-2.5 py-0.5 rounded-full uppercase tracking-wider shrink-0">Secure PDF Viewer</span>
                     <h3 class="text-xs font-bold truncate max-w-md" x-text="activeDocTitle"></h3>
                 </div>
                 <div class="flex items-center space-x-3 text-xs shrink-0">
-                    <button @click="prevPage()" class="bg-slate-800 px-3 py-1 rounded-lg hover:bg-slate-700">&larr; Prev</button>
-                    <span>Halaman <span x-text="pageNum"></span> / <span x-text="pageCount"></span></span>
-                    <button @click="nextPage()" class="bg-slate-800 px-3 py-1 rounded-lg hover:bg-slate-700">Next &rarr;</button>
-                    <button @click="closePdfViewer()" class="bg-red-600 hover:bg-red-700 px-3 py-1 rounded-lg font-bold ml-4 text-white">&times; Tutup</button>
+                    <button @click="prevPage()" class="bg-[#0b3558] px-3 py-1.5 rounded-btn hover:bg-[#006bff] transition">&larr; Prev</button>
+                    <span class="font-medium">Halaman <span x-text="pageNum"></span> / <span x-text="pageCount"></span></span>
+                    <button @click="nextPage()" class="bg-[#0b3558] px-3 py-1.5 rounded-btn hover:bg-[#006bff] transition">Next &rarr;</button>
+                    <button @click="closePdfViewer()" class="bg-red-600 hover:bg-red-700 px-4 py-1.5 rounded-btn font-bold ml-4 text-white">&times; Tutup</button>
                 </div>
             </div>
 
-            <!-- Viewer Canvas Area with Dynamic Security Watermark -->
-            <div class="flex-1 overflow-auto p-4 flex justify-center items-center bg-slate-800 relative select-none" oncontextmenu="return false;">
-                <div class="relative shadow-2xl bg-white rounded overflow-hidden">
+            <div class="flex-1 overflow-auto p-6 flex justify-center items-center bg-[#f8f9fb] relative select-none" oncontextmenu="return false;">
+                <div class="relative shadow-calendly bg-paper rounded-product overflow-hidden border border-[#d4e0ed]">
                     <canvas id="pdf-render-canvas"></canvas>
-                    <div class="absolute inset-0 pointer-events-none flex items-center justify-center rotate-[-30deg] opacity-25">
-                        <div class="text-red-700 font-extrabold text-2xl text-center leading-tight">
+                    <div class="absolute inset-0 pointer-events-none flex items-center justify-center rotate-[-30deg] opacity-20">
+                        <div class="text-red-700 font-extrabold text-xl text-center leading-tight">
                             [INTERNAL EDMS DOCUMENT]<br>
                             ISO 14001 / 45001 / 27001<br>
                             DIARSIPKAN OLEH: {{ Auth::user()->name ?? 'Karyawan' }}
@@ -219,14 +229,13 @@
                     this.renderPage(this.pageNum);
                 }).catch(err => {
                     console.error("Error loading PDF: ", err);
-                    alert("Gagal memuat dokumen PDF. Membuka fallback view.");
                 });
             },
 
             renderPage(num) {
                 if (!this.pdfDoc) return;
                 this.pdfDoc.getPage(num).then(page => {
-                    const viewport = page.getViewport({ scale: 1.25 });
+                    const viewport = page.getViewport({ scale: 1.2 });
                     const canvas = document.getElementById('pdf-render-canvas');
                     const ctx = canvas.getContext('2d');
                     canvas.height = viewport.height;
