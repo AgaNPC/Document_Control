@@ -30,6 +30,10 @@ return new class extends Migration
             $table->string('ConfidentialityLevel', 20)->default('INTERNAL');
             $table->string('FilePath', 500); // Path file di shared storage
             $table->timestamps();
+
+            // Indexes for instant high-performance search across 2,500+ documents
+            $table->index(['Status', 'Department', 'Category']);
+            $table->index('Title');
         });
 
         Schema::create('document_requests', function (Blueprint $table) {
@@ -43,11 +47,13 @@ return new class extends Migration
             $table->text('Reason');
             $table->string('TempFilePath', 500)->nullable();
             $table->integer('CopyCount')->nullable(); // Untuk tipe PRINT
-            $table->string('PlacementLocation', 255)->nullable(); // Untuk lokasi cetak
+            $table->string('PlacementLocation', 255)->nullable();
             $table->integer('CurrentStepOrder')->default(1); // 1: PIC, 2: SecHead, 3: DeptHead
             $table->string('CurrentStatus', 30)->default('PENDING_L1'); // PENDING_L1, PENDING_L2, PENDING_L3, APPROVED, REJECTED
             $table->unsignedBigInteger('RequestedBy');
             $table->timestamps();
+
+            $table->index(['CurrentStatus', 'RequestType']);
         });
 
         Schema::create('request_approval_logs', function (Blueprint $table) {
@@ -69,6 +75,8 @@ return new class extends Migration
             $table->boolean('IsRead')->default(false);
             $table->boolean('IsHandled')->default(false);
             $table->timestamps();
+
+            $table->index(['UserID', 'IsHandled', 'IsRead']);
         });
     }
 
