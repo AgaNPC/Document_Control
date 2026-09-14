@@ -13,14 +13,14 @@
                     </svg>
                     <span>Perpustakaan Dokumen Terdokumentasi</span>
                 </h3>
-                <p class="text-xs text-[#476788] mt-1 font-normal">Cari cepat dari 2.500+ dokumen SOP & regulasi berstatus ACTIVE terproteksi ISO 14001, 45001, 27001.</p>
+                <p class="text-xs text-[#476788] mt-1 font-normal">Repositori terpusat seluruh dokumen SOP & regulasi berstatus ACTIVE terproteksi ISO 14001, 45001, 27001.</p>
             </div>
             <div class="text-xs bg-[#f0f3f8] text-[#004eba] px-4 py-2.5 rounded-full font-bold border border-[#d4e0ed] shrink-0">
                 Total Dokumen Active: <span class="text-[#006bff] font-extrabold">{{ $documents->total() }}</span>
             </div>
         </div>
 
-        <!-- Universal Smart Search Bar -->
+        <!-- Universal Search Bar -->
         <form method="GET" action="{{ route('repository.index') }}" class="pt-2">
             <div class="relative flex items-center shadow-card-sm rounded-btn">
                 <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
@@ -29,41 +29,11 @@
                     </svg>
                 </div>
                 <input type="text" name="search" value="{{ request('search') }}"
-                       placeholder="Cari berdasarkan nama departemen (cth: Finance, K3LH), judul, nomor SOP, atau kategori..."
+                       placeholder="Search"
                        class="w-full pl-12 pr-28 py-3.5 border border-[#d4e0ed] rounded-btn bg-[#f8f9fb] focus:bg-paper focus:ring-2 focus:ring-[#006bff] focus:outline-none text-sm text-[#0b3558] font-medium transition">
                 <button type="submit" class="absolute right-2 px-5 py-2 bg-[#006bff] hover:bg-[#0058d4] text-white font-bold text-xs rounded-btn transition shadow-sm">
-                    Cari Dokumen
+                    Search
                 </button>
-            </div>
-
-            <!-- Quick Search Tags / Keyword Suggestion Chips -->
-            <div class="flex items-center space-x-2 mt-3 text-xs overflow-x-auto pb-1">
-                <span class="text-[11px] font-semibold text-[#476788] shrink-0">Pencarian Populer:</span>
-                <a href="{{ route('repository.index', ['search' => 'Finance']) }}" 
-                   class="px-3 py-1 rounded-full bg-[#f0f3f8] hover:bg-[#e6f0ff] text-[#004eba] font-medium border border-[#d4e0ed] transition shrink-0">
-                    Finance
-                </a>
-                <a href="{{ route('repository.index', ['search' => 'K3LH']) }}" 
-                   class="px-3 py-1 rounded-full bg-[#f0f3f8] hover:bg-[#e6f0ff] text-[#004eba] font-medium border border-[#d4e0ed] transition shrink-0">
-                    K3LH
-                </a>
-                <a href="{{ route('repository.index', ['search' => 'IT System']) }}" 
-                   class="px-3 py-1 rounded-full bg-[#f0f3f8] hover:bg-[#e6f0ff] text-[#004eba] font-medium border border-[#d4e0ed] transition shrink-0">
-                    IT System
-                </a>
-                <a href="{{ route('repository.index', ['search' => 'Quality']) }}" 
-                   class="px-3 py-1 rounded-full bg-[#f0f3f8] hover:bg-[#e6f0ff] text-[#004eba] font-medium border border-[#d4e0ed] transition shrink-0">
-                    Quality Assurance
-                </a>
-                <a href="{{ route('repository.index', ['search' => 'Lingkungan']) }}" 
-                   class="px-3 py-1 rounded-full bg-[#f0f3f8] hover:bg-[#e6f0ff] text-[#004eba] font-medium border border-[#d4e0ed] transition shrink-0">
-                    Lingkungan (ISO 14001)
-                </a>
-                @if(request('search') || request('department') || request('category'))
-                    <a href="{{ route('repository.index') }}" class="px-3 py-1 rounded-full bg-red-50 text-red-600 font-bold border border-red-200 hover:bg-red-100 transition shrink-0 ml-auto">
-                        Reset Pencarian
-                    </a>
-                @endif
             </div>
         </form>
     </div>
