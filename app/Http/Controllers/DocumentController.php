@@ -6,7 +6,6 @@ use App\Models\Document;
 use App\Services\WatermarkService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
 
 class DocumentController extends Controller
 {
@@ -21,6 +20,19 @@ class DocumentController extends Controller
     {
         $query = Document::query()->where('Status', 'ACTIVE');
 
+        // Smart Universal Search Bar: Searches Title, DocNumber, Department, Category, and ConfidentialityLevel simultaneously!
+        if ($request->filled('search')) {
+            $search = trim($request->search);
+            $query->where(function ($q) use ($search) {
+                $q->where('Title', 'like', "%{$search}%")
+                  ->orWhere('DocNumber', 'like', "%{$search}%")
+                  ->orWhere('Department', 'like', "%{$search}%")
+                  ->orWhere('Category', 'like', "%{$search}%")
+                  ->orWhere('ConfidentialityLevel', 'like', "%{$search}%");
+            });
+        }
+
+        // Optional quick department filter if clicked from tree or quick tags
         if ($request->filled('department')) {
             $query->where('Department', $request->department);
         }
@@ -29,22 +41,8 @@ class DocumentController extends Controller
             $query->where('Category', $request->category);
         }
 
-        if ($request->filled('doc_number')) {
-            $query->where('DocNumber', 'like', '%' . $request->doc_number . '%');
-        }
-
-        if ($request->filled('search')) {
-            $search = $request->search;
-            $query->where(function ($q) use ($search) {
-                $q->where('Title', 'like', "%{$search}%")
-                  ->orWhere('DocNumber', 'like', "%{$search}%")
-                  ->orWhere('Category', 'like', "%{$search}%");
-            });
-        }
-
         $documents = $query->latest()->paginate(15)->withQueryString();
 
-        // Get tree structure data: Companies > Departments > Categories
         $departments = Document::where('Status', 'ACTIVE')->select('Department')->distinct()->pluck('Department');
         $categories = ['K3', 'Lingkungan', 'IT/Keamanan', 'Mutu'];
 

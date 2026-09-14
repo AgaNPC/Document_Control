@@ -3,20 +3,69 @@
 @section('content')
 <div x-data="repositoryView()" class="space-y-6">
 
-    <!-- Description & Count Banner -->
-    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 bg-paper p-6 rounded-card border border-[#d4e0ed] shadow-card-sm">
-        <div>
-            <h3 class="text-base font-bold text-[#0b3558] flex items-center gap-2">
-                <svg class="w-5 h-5 text-[#006bff]" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12.75V12A2.25 2.25 0 014.5 9.75h15A2.25 2.25 0 0121.75 12v.75m-8.69-6.44l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z" />
-                </svg>
-                <span>Perpustakaan Dokumen Terdokumentasi</span>
-            </h3>
-            <p class="text-xs text-[#476788] mt-1 font-normal">Repositori terpusat untuk seluruh SOP dan regulasi berstatus ACTIVE dengan fitur in-app viewer dan dynamic watermark terproteksi.</p>
+    <!-- Description & Search Hero Card -->
+    <div class="bg-paper p-6 rounded-card border border-[#d4e0ed] shadow-card-sm space-y-4">
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <div>
+                <h3 class="text-base font-bold text-[#0b3558] flex items-center gap-2">
+                    <svg class="w-5 h-5 text-[#006bff]" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12.75V12A2.25 2.25 0 014.5 9.75h15A2.25 2.25 0 0121.75 12v.75m-8.69-6.44l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z" />
+                    </svg>
+                    <span>Perpustakaan Dokumen Terdokumentasi</span>
+                </h3>
+                <p class="text-xs text-[#476788] mt-1 font-normal">Cari cepat dari 2.500+ dokumen SOP & regulasi berstatus ACTIVE terproteksi ISO 14001, 45001, 27001.</p>
+            </div>
+            <div class="text-xs bg-[#f0f3f8] text-[#004eba] px-4 py-2.5 rounded-full font-bold border border-[#d4e0ed] shrink-0">
+                Total Dokumen Active: <span class="text-[#006bff] font-extrabold">{{ $documents->total() }}</span>
+            </div>
         </div>
-        <div class="text-xs bg-[#f0f3f8] text-[#004eba] px-4 py-2.5 rounded-full font-bold border border-[#d4e0ed] shrink-0">
-            Total Dokumen Active: <span class="text-[#006bff] font-extrabold">{{ $documents->total() }}</span>
-        </div>
+
+        <!-- Universal Smart Search Bar -->
+        <form method="GET" action="{{ route('repository.index') }}" class="pt-2">
+            <div class="relative flex items-center shadow-card-sm rounded-btn">
+                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <svg class="w-5 h-5 text-[#476788]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+                    </svg>
+                </div>
+                <input type="text" name="search" value="{{ request('search') }}"
+                       placeholder="Cari berdasarkan nama departemen (cth: Finance, K3LH), judul, nomor SOP, atau kategori..."
+                       class="w-full pl-12 pr-28 py-3.5 border border-[#d4e0ed] rounded-btn bg-[#f8f9fb] focus:bg-paper focus:ring-2 focus:ring-[#006bff] focus:outline-none text-sm text-[#0b3558] font-medium transition">
+                <button type="submit" class="absolute right-2 px-5 py-2 bg-[#006bff] hover:bg-[#0058d4] text-white font-bold text-xs rounded-btn transition shadow-sm">
+                    Cari Dokumen
+                </button>
+            </div>
+
+            <!-- Quick Search Tags / Keyword Suggestion Chips -->
+            <div class="flex items-center space-x-2 mt-3 text-xs overflow-x-auto pb-1">
+                <span class="text-[11px] font-semibold text-[#476788] shrink-0">Pencarian Populer:</span>
+                <a href="{{ route('repository.index', ['search' => 'Finance']) }}" 
+                   class="px-3 py-1 rounded-full bg-[#f0f3f8] hover:bg-[#e6f0ff] text-[#004eba] font-medium border border-[#d4e0ed] transition shrink-0">
+                    Finance
+                </a>
+                <a href="{{ route('repository.index', ['search' => 'K3LH']) }}" 
+                   class="px-3 py-1 rounded-full bg-[#f0f3f8] hover:bg-[#e6f0ff] text-[#004eba] font-medium border border-[#d4e0ed] transition shrink-0">
+                    K3LH
+                </a>
+                <a href="{{ route('repository.index', ['search' => 'IT System']) }}" 
+                   class="px-3 py-1 rounded-full bg-[#f0f3f8] hover:bg-[#e6f0ff] text-[#004eba] font-medium border border-[#d4e0ed] transition shrink-0">
+                    IT System
+                </a>
+                <a href="{{ route('repository.index', ['search' => 'Quality']) }}" 
+                   class="px-3 py-1 rounded-full bg-[#f0f3f8] hover:bg-[#e6f0ff] text-[#004eba] font-medium border border-[#d4e0ed] transition shrink-0">
+                    Quality Assurance
+                </a>
+                <a href="{{ route('repository.index', ['search' => 'Lingkungan']) }}" 
+                   class="px-3 py-1 rounded-full bg-[#f0f3f8] hover:bg-[#e6f0ff] text-[#004eba] font-medium border border-[#d4e0ed] transition shrink-0">
+                    Lingkungan (ISO 14001)
+                </a>
+                @if(request('search') || request('department') || request('category'))
+                    <a href="{{ route('repository.index') }}" class="px-3 py-1 rounded-full bg-red-50 text-red-600 font-bold border border-red-200 hover:bg-red-100 transition shrink-0 ml-auto">
+                        Reset Pencarian
+                    </a>
+                @endif
+            </div>
+        </form>
     </div>
 
     <!-- Main Layout: Folder Explorer + Document Table -->
@@ -25,7 +74,7 @@
         <!-- Folder Explorer Sidebar -->
         <div class="lg:col-span-1 bg-paper p-5 rounded-card border border-[#d4e0ed] shadow-card-sm space-y-4">
             <h4 class="text-xs font-bold text-[#476788] uppercase tracking-wider border-b border-[#d4e0ed] pb-3">
-                Struktur Hirarki Folder
+                Hirarki Folder Departemen
             </h4>
             
             <div class="text-xs space-y-2">
@@ -40,81 +89,34 @@
                 <!-- Department Nodes -->
                 <div class="pl-3 space-y-1 border-l border-[#d4e0ed]">
                     <a href="{{ route('repository.index') }}" 
-                       class="block text-xs text-[#0b3558] hover:text-[#006bff] font-semibold py-1.5 px-3 rounded-btn hover:bg-[#f0f3f8] transition {{ !request('department') ? 'bg-[#e6f0ff] text-[#006bff] font-bold' : '' }}">
+                       class="block text-xs text-[#0b3558] hover:text-[#006bff] font-semibold py-1.5 px-3 rounded-btn hover:bg-[#f0f3f8] transition {{ (!request('department') && !request('search')) ? 'bg-[#e6f0ff] text-[#006bff] font-bold' : '' }}">
                         Semua Departemen
                     </a>
                     @foreach($departments as $dept)
-                        <div x-data="{ openDept: {{ request('department') == $dept ? 'true' : 'false' }} }">
-                            <div @click="openDept = !openDept" 
-                                 class="flex items-center justify-between py-1.5 px-3 rounded-btn hover:bg-[#f0f3f8] cursor-pointer font-semibold text-[#0b3558] transition">
-                                <span class="flex items-center gap-2 truncate">
-                                    <svg class="w-3.5 h-3.5 text-[#476788]" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12.75V12A2.25 2.25 0 014.5 9.75h15A2.25 2.25 0 0121.75 12v.75m-8.69-6.44l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z" />
-                                    </svg>
-                                    <span class="truncate">{{ $dept }}</span>
-                                </span>
-                                <svg class="w-3 h-3 text-[#476788] transition-transform" :class="openDept ? 'rotate-180' : ''" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                        <a href="{{ route('repository.index', ['search' => $dept]) }}" 
+                           class="flex items-center justify-between py-1.5 px-3 rounded-btn hover:bg-[#f0f3f8] font-semibold text-[#0b3558] transition {{ request('search') == $dept ? 'bg-[#e6f0ff] text-[#006bff] font-bold' : '' }}">
+                            <span class="flex items-center gap-2 truncate">
+                                <svg class="w-3.5 h-3.5 text-[#476788]" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12.75V12A2.25 2.25 0 014.5 9.75h15A2.25 2.25 0 0121.75 12v.75m-8.69-6.44l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z" />
                                 </svg>
-                            </div>
-
-                            <!-- Categories -->
-                            <div x-show="openDept" x-cloak class="pl-4 py-1 space-y-1">
-                                @foreach($categories as $cat)
-                                    <a href="{{ route('repository.index', ['department' => $dept, 'category' => $cat]) }}" 
-                                       class="block text-[11px] py-1 px-2.5 rounded-btn text-[#476788] hover:text-[#006bff] hover:bg-[#f0f3f8] font-medium transition {{ (request('department') == $dept && request('category') == $cat) ? 'bg-[#e6f0ff] text-[#006bff] font-bold' : '' }}">
-                                        Kategori: {{ $cat }}
-                                    </a>
-                                @endforeach
-                            </div>
-                        </div>
+                                <span class="truncate">{{ $dept }}</span>
+                            </span>
+                        </a>
                     @endforeach
                 </div>
             </div>
         </div>
 
-        <!-- Filter & Table Section -->
+        <!-- Document List Table Section -->
         <div class="lg:col-span-3 space-y-6">
 
-            <!-- Search & Filter Form -->
-            <form method="GET" action="{{ route('repository.index') }}" class="bg-paper p-5 rounded-card border border-[#d4e0ed] shadow-card-sm grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-xs">
-                <div class="sm:col-span-2 lg:col-span-4">
-                    <label class="block font-bold text-[#0b3558] mb-1.5">Kata Kunci (Nomor / Judul / Kategori):</label>
-                    <input type="text" name="search" value="{{ request('search') }}"
-                           placeholder="Ketik untuk mencari dari seluruh dokumen active..."
-                           class="w-full p-3 border border-[#d4e0ed] rounded-input bg-[#f8f9fb] focus:bg-paper focus:ring-2 focus:ring-[#006bff] focus:outline-none text-xs text-[#0b3558]">
+            <!-- Active Search Filter Badge Indicator -->
+            @if(request('search'))
+                <div class="bg-[#e6f0ff] border border-[#d4e0ed] px-4 py-2.5 rounded-btn flex items-center justify-between text-xs text-[#004eba]">
+                    <span>Hasil pencarian untuk kata kunci: <strong class="text-[#0b3558]">"{{ request('search') }}"</strong></span>
+                    <a href="{{ route('repository.index') }}" class="font-bold text-red-600 hover:underline">Hapus Filter &times;</a>
                 </div>
-
-                <div>
-                    <label class="block font-bold text-[#0b3558] mb-1.5">Departemen:</label>
-                    <select name="department" class="w-full p-2.5 border border-[#d4e0ed] rounded-input bg-[#f8f9fb] focus:bg-paper focus:outline-none text-[#0b3558]">
-                        <option value="">-- Semua Departemen --</option>
-                        @foreach($departments as $dept)
-                            <option value="{{ $dept }}" {{ request('department') == $dept ? 'selected' : '' }}>{{ $dept }}</option>
-                        @endforeach
-                    </select>
-                </div>
-
-                <div>
-                    <label class="block font-bold text-[#0b3558] mb-1.5">Kategori Standard:</label>
-                    <select name="category" class="w-full p-2.5 border border-[#d4e0ed] rounded-input bg-[#f8f9fb] focus:bg-paper focus:outline-none text-[#0b3558]">
-                        <option value="">-- Semua Kategori --</option>
-                        @foreach($categories as $cat)
-                            <option value="{{ $cat }}" {{ request('category') == $cat ? 'selected' : '' }}>{{ $cat }}</option>
-                        @endforeach
-                    </select>
-                </div>
-
-                <div>
-                    <label class="block font-bold text-[#0b3558] mb-1.5">Nomor Dokumen:</label>
-                    <input type="text" name="doc_number" value="{{ request('doc_number') }}" placeholder="SOP-K3-001..." class="w-full p-2.5 border border-[#d4e0ed] rounded-input bg-[#f8f9fb] text-[#0b3558]">
-                </div>
-
-                <div class="flex items-end space-x-2">
-                    <button type="submit" class="w-full py-2.5 bg-[#006bff] hover:bg-[#0058d4] text-white font-bold rounded-btn transition shadow-sm">Filter</button>
-                    <a href="{{ route('repository.index') }}" class="py-2.5 px-4 bg-[#f0f3f8] text-[#476788] hover:text-[#0b3558] font-semibold rounded-btn text-center border border-[#d4e0ed]">Reset</a>
-                </div>
-            </form>
+            @endif
 
             <!-- Document List Table -->
             <div class="bg-paper rounded-card border border-[#d4e0ed] shadow-card-sm overflow-hidden">
@@ -161,7 +163,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="7" class="p-8 text-center text-[#476788] font-medium">Dokumen tidak ditemukan.</td>
+                                    <td colspan="7" class="p-8 text-center text-[#476788] font-medium">Dokumen tidak ditemukan untuk kata kunci yang dicari.</td>
                                 </tr>
                             @endforelse
                         </tbody>
