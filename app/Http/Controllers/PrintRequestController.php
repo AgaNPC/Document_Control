@@ -36,7 +36,6 @@ class PrintRequestController extends Controller
             'document_id' => 'required|exists:documents,DocumentID',
             'copy_count' => 'required|integer|min:1|max:100',
             'reason' => 'required|string|max:500',
-            'placement_location' => 'required|string|max:255',
         ]);
 
         $document = Document::findOrFail($request->document_id);
@@ -51,7 +50,6 @@ class PrintRequestController extends Controller
             'Category' => $document->Category,
             'Reason' => $request->reason,
             'CopyCount' => $request->copy_count,
-            'PlacementLocation' => $request->placement_location,
             'CurrentStepOrder' => 1,
             'CurrentStatus' => 'PENDING_L1',
             'RequestedBy' => $user ? $user->id : 1,

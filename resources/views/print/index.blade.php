@@ -36,7 +36,6 @@
                         <th class="p-4">Dokumen Target</th>
                         <th class="p-4">Jumlah Eksemplar</th>
                         <th class="p-4">Pemohon</th>
-                        <th class="p-4">Lokasi Penempatan</th>
                         <th class="p-4">Status Approval</th>
                         <th class="p-4 text-center">Controlled Copy PDF</th>
                     </tr>
@@ -51,7 +50,6 @@
                             </td>
                             <td class="p-4 font-bold text-[#0b3558]">{{ $req->CopyCount }} Eksemplar</td>
                             <td class="p-4 text-[#0b3558] font-medium">{{ $req->requester->name ?? 'User' }}</td>
-                            <td class="p-4 text-[#476788]">{{ $req->PlacementLocation ?? '-' }}</td>
                             <td class="p-4">
                                 <span class="px-3 py-1 rounded-full text-[11px] font-bold
                                     {{ $req->CurrentStatus == 'APPROVED' ? 'bg-[#006bff] text-white' : '' }}
@@ -76,7 +74,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="7" class="p-8 text-center text-[#476788] font-medium">Belum ada permohonan cetak terkontrol.</td>
+                            <td colspan="6" class="p-8 text-center text-[#476788] font-medium">Belum ada permohonan cetak terkontrol.</td>
                         </tr>
                     @endforelse
                 </tbody>
@@ -112,11 +110,6 @@
                 <div>
                     <label class="block font-bold text-[#0b3558] mb-1.5">Jumlah Eksemplar:</label>
                     <input type="number" name="copy_count" value="1" min="1" max="100" required class="w-full p-3 border border-[#d4e0ed] rounded-input bg-[#f8f9fb] text-[#0b3558]">
-                </div>
-
-                <div>
-                    <label class="block font-bold text-[#0b3558] mb-1.5">Lokasi Penempatan Salinan Fisik:</label>
-                    <input type="text" name="placement_location" required placeholder="Contoh: Ruang Control Room Lantai 2..." class="w-full p-3 border border-[#d4e0ed] rounded-input bg-[#f8f9fb] text-[#0b3558]">
                 </div>
 
                 <div>
